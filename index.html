@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ADIBAS — FrontEnd Designer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Instrument+Serif:ital@0;1&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0A0A09;--bg2:#111110;--bg3:#1A1A18;
+  --line:#252522;--line2:#2E2E2A;
+  --white:#F0EDE6;--off:#7A7770;
+  --accent:#E8FF47;--red:#FF4D2E;
+  --sans:'Syne',sans-serif;
+  --display:'Bebas Neue',sans-serif;
+  --serif:'Instrument Serif',serif;
+}
+html{scroll-behavior:smooth;cursor:none}
+body{background:var(--bg);color:var(--white);font-family:var(--sans);overflow-x:hidden;}
+
+/* CURSOR */
+#cur{position:fixed;width:10px;height:10px;background:var(--accent);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);mix-blend-mode:difference;transition:width .2s,height .2s;}
+#cur.h{width:38px;height:38px;}
+#curt{position:fixed;width:30px;height:30px;border:1px solid rgba(232,255,71,.25);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:left .15s cubic-bezier(.25,.46,.45,.94),top .15s cubic-bezier(.25,.46,.45,.94);}
+
+/* NOISE */
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");opacity:.025;pointer-events:none;z-index:999;}
+
+/* HEADER */
+header{position:fixed;top:0;left:0;right:0;z-index:500;display:flex;justify-content:space-between;align-items:center;padding:0 2.5rem;height:58px;border-bottom:1px solid var(--line);background:rgba(10,10,9,.92);backdrop-filter:blur(16px);}
+.logo{font-family:var(--display);font-size:1.35rem;letter-spacing:.08em;color:var(--white);text-decoration:none;}
+nav{display:flex;align-items:center;}
+nav a{font-size:.68rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--off);text-decoration:none;padding:0 1.25rem;height:58px;display:flex;align-items:center;border-left:1px solid var(--line);transition:color .2s,background .2s;}
+nav a:hover{color:var(--white);background:rgba(255,255,255,.03);}
+nav .cta{color:var(--bg);background:var(--accent);border-left:none;font-weight:700;transition:background .2s;}
+nav .cta:hover{background:var(--white);}
+
+/* HERO */
+#home{min-height:100vh;padding-top:58px;position:relative;overflow:hidden;display:flex;flex-direction:column;}
+.hgrid{position:absolute;inset:0;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:72px 72px;mask-image:radial-gradient(ellipse 90% 70% at 60% 30%,black 20%,transparent 80%);opacity:.5;}
+.hbanner{position:absolute;top:50%;transform:translateY(-50%) rotate(-1.8deg);left:-4%;right:-4%;overflow:hidden;background:var(--accent);padding:.55rem 0;z-index:2;}
+.hmarquee{display:flex;white-space:nowrap;animation:mq 16s linear infinite;gap:2.5rem;}
+.hmarquee span{font-family:var(--display);font-size:1.05rem;letter-spacing:.14em;color:var(--bg);flex-shrink:0;}
+@keyframes mq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.hcontent{position:relative;z-index:3;display:flex;flex-direction:column;justify-content:flex-end;flex:1;padding:0 3rem 4.5rem;}
+.htag{font-size:.62rem;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--off);margin-bottom:1.25rem;display:flex;align-items:center;gap:.875rem;}
+.htag::before{content:'';width:28px;height:1px;background:var(--off);}
+.hname{font-family:var(--display);font-size:clamp(5.5rem,13vw,15rem);line-height:.88;letter-spacing:.025em;overflow:hidden;}
+.hname .hl{display:block;animation:su .95s cubic-bezier(.76,0,.24,1) both;}
+.hname .hl:nth-child(2){animation-delay:.13s;color:var(--accent);}
+@keyframes su{from{transform:translateY(110%);opacity:0;}to{transform:translateY(0);opacity:1;}}
+.hfoot{display:flex;justify-content:space-between;align-items:flex-end;margin-top:2.5rem;padding-top:1.5rem;border-top:1px solid var(--line);}
+.hdesc{max-width:300px;font-size:.875rem;line-height:1.75;color:var(--off);}
+.hdesc strong{color:var(--white);font-weight:600;}
+.hstats{display:flex;gap:3rem;}
+.hstat-n{font-family:var(--display);font-size:2.75rem;color:var(--white);line-height:1;margin-bottom:.15rem;}
+.hstat-l{font-size:.6rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--off);}
+.hscroll{display:flex;align-items:center;gap:.7rem;font-size:.6rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--off);animation:fi 1s 1.3s both;}
+.sdot{width:7px;height:7px;border-radius:50%;background:var(--accent);animation:sp 2s ease-in-out infinite;}
+@keyframes sp{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.65)}}
+@keyframes fi{from{opacity:0}to{opacity:1}}
+
+/* WORK */
+#work{border-top:1px solid var(--line);}
+.whead{display:grid;grid-template-columns:1fr auto;align-items:center;padding:1.75rem 3rem;border-bottom:1px solid var(--line);}
+.wlabel{font-size:.62rem;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--off);margin-bottom:.4rem;}
+.wtitle{font-family:var(--display);font-size:clamp(1.8rem,3.5vw,3rem);letter-spacing:.04em;}
+.wnum{font-family:var(--display);font-size:7rem;color:var(--line2);line-height:1;}
+
+/* PROJECT LIST */
+.plist{display:flex;flex-direction:column;}
+.pitem{display:grid;grid-template-columns:56px 1fr 180px 60px 44px;align-items:center;gap:0 1.75rem;padding:1.75rem 3rem;border-bottom:1px solid var(--line);cursor:pointer;position:relative;overflow:hidden;transition:color .01s;}
+.pitem::before{content:'';position:absolute;inset:0;background:var(--accent);transform:translateX(-101%);transition:transform .38s cubic-bezier(.76,0,.24,1);z-index:0;}
+.pitem:hover::before{transform:translateX(0);}
+.pitem > *{position:relative;z-index:1;}
+.pitem:hover .pn,.pitem:hover .pname,.pitem:hover .pcat,.pitem:hover .pyr{color:var(--bg)!important;}
+.pitem:hover .parr{border-color:rgba(0,0,0,.3);color:var(--bg);}
+.pn{font-family:var(--display);font-size:.9rem;letter-spacing:.08em;color:var(--line2);transition:color .25s;}
+.pname{font-family:var(--display);font-size:clamp(1.6rem,3vw,2.8rem);letter-spacing:.04em;transition:color .25s;}
+.pcat{font-size:.65rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--off);text-align:right;transition:color .25s;}
+.pyr{font-size:.65rem;font-weight:600;letter-spacing:.1em;color:var(--off);text-align:right;transition:color .25s;}
+.parr{width:34px;height:34px;border:1px solid var(--line2);border-radius:50%;display:flex;align-items:center;justify-content:center;transition:border-color .25s,color .25s,transform .3s;}
+.pitem:hover .parr{transform:rotate(45deg);}
+
+/* FEATURE GRID */
+.fgrid{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line);}
+.fcard{aspect-ratio:4/3;position:relative;overflow:hidden;cursor:pointer;border-right:1px solid var(--line);}
+.fcard:last-child{border-right:none;}
+.fbg{width:100%;height:100%;transition:transform .65s cubic-bezier(.25,.46,.45,.94),filter .45s;filter:brightness(.5) saturate(.75);}
+.fcard:hover .fbg{transform:scale(1.09);filter:brightness(.25) saturate(1.3);}
+.falways{position:absolute;bottom:1.5rem;left:1.75rem;font-family:var(--display);font-size:1.5rem;letter-spacing:.04em;color:rgba(240,237,230,.2);line-height:1.1;transition:opacity .3s;}
+.fcard:hover .falways{opacity:0;}
+.fover{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:1.75rem;opacity:0;transition:opacity .3s;}
+.fcard:hover .fover{opacity:1;}
+.fcat{font-size:.6rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:.5rem;}
+.fname{font-family:var(--display);font-size:1.75rem;letter-spacing:.04em;color:var(--white);line-height:1.05;}
+
+/* CASE STUDY */
+.csw{display:none;}
+.csw.on{display:block;}
+.csbar{height:58px;display:flex;align-items:center;justify-content:space-between;padding:0 3rem;border-bottom:1px solid var(--line);background:var(--bg);position:sticky;top:58px;z-index:400;}
+.csbread{font-size:.6rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--off);display:flex;align-items:center;gap:.7rem;}
+.csbread .s{color:var(--line2);}
+.csback{display:flex;align-items:center;gap:.5rem;font-size:.6rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--off);background:none;border:none;cursor:pointer;font-family:var(--sans);padding:0;transition:color .2s;}
+.csback:hover{color:var(--white);}
+
+.cshero{height:88vh;position:relative;overflow:hidden;display:flex;align-items:flex-end;}
+.cshbg{position:absolute;inset:0;filter:brightness(.38);}
+.cshcont{position:relative;z-index:1;padding:3.5rem 3rem;width:100%;display:grid;grid-template-columns:1fr auto;align-items:flex-end;gap:3rem;}
+.cshcat{font-size:.6rem;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:.875rem;display:flex;align-items:center;gap:.7rem;}
+.cshcat::before{content:'';width:20px;height:1px;background:var(--accent);}
+.cshtitle{font-family:var(--display);font-size:clamp(4rem,8.5vw,9rem);letter-spacing:.025em;line-height:.88;color:var(--white);}
+.cshtitle em{font-family:var(--serif);font-style:italic;color:var(--accent);font-size:.8em;}
+.cshmeta{display:flex;flex-direction:column;gap:1.25rem;text-align:right;}
+.csml{font-size:.58rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--off);margin-bottom:.2rem;}
+.csmv{font-size:.875rem;color:var(--white);font-weight:500;}
+
+.csec{padding:4.5rem 3rem;border-bottom:1px solid var(--line);}
+.csec-n{font-size:.62rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--off);margin-bottom:.6rem;}
+.csec h2{font-family:var(--display);font-size:clamp(2.25rem,5vw,4.5rem);letter-spacing:.04em;line-height:.92;margin-bottom:2.75rem;color:var(--white);}
+.csec h2 em{font-family:var(--serif);font-style:italic;color:var(--accent);}
+
+.csovgrid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;}
+.csovp p{font-size:.9375rem;line-height:1.82;color:rgba(240,237,230,.65);margin-bottom:.875rem;}
+
+.cssteps{display:flex;flex-direction:column;}
+.csstep{display:grid;grid-template-columns:72px 1fr 1fr;gap:2.5rem;align-items:center;padding:2.75rem 0;border-bottom:1px solid var(--line);}
+.csstep:last-child{border-bottom:none;}
+.csnum{font-family:var(--display);font-size:4.5rem;color:var(--line2);line-height:1;letter-spacing:.04em;}
+.csstit{font-family:var(--display);font-size:1.7rem;letter-spacing:.04em;color:var(--white);margin-bottom:.6rem;}
+.csdesc{font-size:.875rem;line-height:1.78;color:rgba(240,237,230,.6);}
+.csimg{width:100%;aspect-ratio:16/9;border-radius:2px;}
+
+.csmetrics{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--line);}
+.csm{padding:2.75rem 2.25rem;border-right:1px solid var(--line);position:relative;overflow:hidden;}
+.csm:last-child{border-right:none;}
+.csm::after{content:'';position:absolute;left:0;top:0;width:2px;height:0;background:var(--accent);transition:height .6s cubic-bezier(.76,0,.24,1);}
+.csm.iv::after,.csm:hover::after{height:100%;}
+.csmval{font-family:var(--display);font-size:4rem;letter-spacing:.04em;color:var(--accent);line-height:1;margin-bottom:.6rem;}
+.csmlbl{font-size:.65rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--off);}
+.csrb{display:grid;grid-template-columns:1fr 1fr;gap:2.75rem;margin-top:2.75rem;}
+.csrb p{font-size:.9375rem;line-height:1.82;color:rgba(240,237,230,.62);}
+
+.csnext{display:grid;grid-template-columns:1fr auto;align-items:center;gap:2rem;padding:2.75rem 3rem;background:none;border:none;border-top:1px solid var(--line);width:100%;font-family:var(--sans);text-align:left;cursor:pointer;transition:background .3s;color:var(--white);}
+.csnext:hover{background:var(--bg2);}
+.csnl{font-size:.6rem;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--off);margin-bottom:.65rem;}
+.csnn{font-family:var(--display);font-size:clamp(1.75rem,3.5vw,3.5rem);letter-spacing:.04em;}
+.cna{width:60px;height:60px;border:1px solid var(--line2);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .3s,border-color .3s,transform .3s;}
+.csnext:hover .cna{background:var(--accent);border-color:var(--accent);color:var(--bg);transform:rotate(45deg);}
+
+/* ABOUT */
+#about{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--line);}
+.abl{padding:4.5rem 3rem;border-right:1px solid var(--line);}
+.abr{padding:4.5rem 3rem;display:flex;flex-direction:column;justify-content:space-between;}
+.ablbl{font-size:.6rem;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--off);margin-bottom:2rem;display:flex;align-items:center;gap:.875rem;}
+.ablbl::before{content:'';width:22px;height:1px;background:var(--off);}
+.abbig{font-family:var(--display);font-size:clamp(3.5rem,7.5vw,7.5rem);letter-spacing:.03em;line-height:.9;color:var(--white);margin-bottom:2rem;}
+.abbig em{font-family:var(--serif);font-style:italic;color:var(--accent);}
+.abp p{font-size:.9375rem;line-height:1.82;color:rgba(240,237,230,.62);margin-bottom:.875rem;}
+.skillgrid{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--line);margin-top:2rem;}
+.sk{padding:.9rem 1.2rem;border-bottom:1px solid var(--line);border-right:1px solid var(--line);font-size:.68rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--off);transition:color .2s,background .2s;cursor:default;}
+.sk:hover{color:var(--accent);background:rgba(232,255,71,.04);}
+.sk:nth-child(2n){border-right:none;}
+.abport{width:100%;aspect-ratio:3/4;background:linear-gradient(160deg,#1a1a18,#252520);display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.abinit{font-family:var(--display);font-size:11rem;color:rgba(255,255,255,.04);letter-spacing:.1em;user-select:none;}
+.awawards{margin-top:2rem;}
+.aw{display:flex;justify-content:space-between;align-items:center;padding:.8rem 0;border-bottom:1px solid var(--line);}
+.awn{font-size:.78rem;font-weight:600;letter-spacing:.06em;color:var(--white);}
+.awy{font-size:.65rem;font-weight:600;letter-spacing:.1em;color:var(--off);}
+
+/* CONTACT */
+#contact{border-top:1px solid var(--line);}
+.chtop{padding:5rem 3rem 3rem;border-bottom:1px solid var(--line);}
+.chbig{font-family:var(--display);font-size:clamp(4.5rem,10vw,12rem);letter-spacing:.025em;line-height:.88;color:var(--white);}
+.chbig span{color:var(--accent);}
+.chgrid{display:grid;grid-template-columns:1fr 1fr;}
+.chl{padding:3rem;border-right:1px solid var(--line);}
+.chr{padding:3rem;}
+.chlink{display:flex;align-items:center;justify-content:space-between;padding:1.1rem 0;border-bottom:1px solid var(--line);text-decoration:none;transition:all .2s;}
+.chlink:first-child{border-top:1px solid var(--line);}
+.chll{font-size:.58rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--off);margin-bottom:.25rem;transition:color .2s;}
+.chlv{font-size:.875rem;color:var(--white);font-weight:500;transition:color .2s;}
+.chlink:hover .chlv{color:var(--accent);}
+.chlarr{width:30px;height:30px;border:1px solid var(--line2);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;color:var(--off);}
+.chlink:hover .chlarr{background:var(--accent);border-color:var(--accent);color:var(--bg);transform:rotate(45deg);}
+
+.form{display:flex;flex-direction:column;}
+.ff{display:flex;flex-direction:column;border-bottom:1px solid var(--line);padding:1.2rem 0;}
+.ff:first-child{border-top:1px solid var(--line);}
+.ff label{font-size:.58rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--off);margin-bottom:.45rem;}
+.ff input,.ff textarea{background:none;border:none;outline:none;color:var(--white);font-family:var(--sans);font-size:.9375rem;padding:0;resize:none;}
+.ff input::placeholder,.ff textarea::placeholder{color:var(--line2);}
+.ff textarea{height:90px;}
+.fsub{margin-top:2rem;display:inline-flex;align-items:center;gap:.875rem;background:var(--accent);color:var(--bg);border:none;font-family:var(--sans);font-size:.7rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;padding:1rem 2.25rem;cursor:pointer;transition:background .2s,transform .2s;}
+.fsub:hover{background:var(--white);transform:translateY(-2px);}
+.fsub svg{transition:transform .2s;}
+.fsub:hover svg{transform:translateX(4px);}
+
+footer{display:flex;justify-content:space-between;align-items:center;padding:1.5rem 3rem;border-top:1px solid var(--line);background:var(--bg2);}
+footer span{font-size:.6rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--off);}
+
+/* GRADIENTS */
+.g1{background:linear-gradient(140deg,#1a2a1a,#0a3a1a,#0a1a0a);}
+.g2{background:linear-gradient(140deg,#2a1a0a,#3a1a05,#1a0802);}
+.g3{background:linear-gradient(140deg,#0a1a2a,#052538,#021018);}
+.g4{background:linear-gradient(140deg,#2a0a1a,#3a0520,#150210);}
+.g5{background:linear-gradient(140deg,#1a1a0a,#2a2505,#10100a);}
+.g6{background:linear-gradient(140deg,#0a1a1a,#052530,#021518);}
+.gh1{background:linear-gradient(160deg,#2a1200,#3a1a05,#080400);}
+.gh2{background:linear-gradient(160deg,#002a18,#053520,#001008);}
+.gh3{background:linear-gradient(160deg,#001a2a,#032030,#00080f);}
+
+.rv{opacity:0;transform:translateY(28px);transition:opacity .75s cubic-bezier(.25,.46,.45,.94),transform .75s cubic-bezier(.25,.46,.45,.94);}
+.rv.in{opacity:1;transform:none;}
+</style>
+</head>
+<body>
+
+<div id="cur"></div>
+<div id="curt"></div>
+
+<header>
+  <a href="#" class="logo" onclick="goHome();return false;">MS</a>
+  <nav>
+    <a href="#" onclick="goHome();scrollTo('work');return false;">Work</a>
+    <a href="#" onclick="goHome();scrollTo('about');return false;">About</a>
+    <a href="#" onclick="goHome();scrollTo('contact');return false;" class="cta">Contact</a>
+  </nav>
+</header>
+
+<div id="mp">
+
+<section id="home">
+  <div class="hgrid"></div>
+  <div class="hbanner">
+    <div class="hmarquee">
+      <span>UI DESIGN</span><span>·</span><span>VISUAL SYSTEMS</span><span>·</span><span>INTERACTION</span><span>·</span><span>MOTION</span><span>·</span><span>BRANDING</span><span>·</span><span>PROTOTYPING</span><span>·</span>
+      <span>UI DESIGN</span><span>·</span><span>VISUAL SYSTEMS</span><span>·</span><span>INTERACTION</span><span>·</span><span>MOTION</span><span>·</span><span>BRANDING</span><span>·</span><span>PROTOTYPING</span><span>·</span>
+    </div>
+  </div>
+  <div class="hcontent">
+    <div class="htag">Portfolio 2025</div>
+    <div class="hname">
+      <span class="hl">Adibas</span>
+      <span class="hl">SOLÈNE</span>
+    </div>
+    <div class="hfoot">
+      <p class="hdesc"><strong>UI Designer</strong> crafting interfaces where precision meets poetry. Available for select collaborations.</p>
+      <div class="hstats">
+        <div><div class="hstat-n">8+</div><div class="hstat-l">Years Active</div></div>
+        <div><div class="hstat-n">40</div><div class="hstat-l">Projects Shipped</div></div>
+        <div><div class="hstat-n">3×</div><div class="hstat-l">Award Winner</div></div>
+      </div>
+      <div class="hscroll"><div class="sdot"></div><span>Scroll to explore</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="work">
+  <div class="whead rv">
+    <div><div class="wlabel">Selected Work</div><div class="wtitle">RECENT PROJECTS</div></div>
+    <div class="wnum">06</div>
+  </div>
+  <div class="plist">
+    <div class="pitem rv" onclick="openCS(0)">
+      <div class="pn">01</div><div class="pname">VAULT</div>
+      <div class="pcat">Mobile · FinTech</div><div class="pyr">2024</div>
+      <div class="parr"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M7 17L17 7M7 7h10v10"/></svg></div>
+    </div>
+    <div class="pitem rv" onclick="openCS(1)" style="transition-delay:.06s">
+      <div class="pn">02</div><div class="pname">GROUNDING</div>
+      <div class="pcat">Web · Wellness</div><div class="pyr">2024</div>
+      <div class="parr"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M7 17L17 7M7 7h10v10"/></svg></div>
+    </div>
+    <div class="pitem rv" onclick="openCS(2)" style="transition-delay:.12s">
+      <div class="pn">03</div><div class="pname">PRISM</div>
+      <div class="pcat">Design System · SaaS</div><div class="pyr">2023</div>
+      <div class="parr"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M7 17L17 7M7 7h10v10"/></svg></div>
+    </div>
+    <div class="pitem rv" onclick="openCS(0)" style="transition-delay:.18s">
+      <div class="pn">04</div><div class="pname">FLORET</div>
+      <div class="pcat">Brand · E-Commerce</div><div class="pyr">2023</div>
+      <div class="parr"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M7 17L17 7M7 7h10v10"/></svg></div>
+    </div>
+    <div class="pitem rv" onclick="openCS(1)" style="transition-delay:.24s">
+      <div class="pn">05</div><div class="pname">STRATA</div>
+      <div class="pcat">Dashboard · Analytics</div><div class="pyr">2022</div>
+      <div class="parr"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M7 17L17 7M7 7h10v10"/></svg></div>
+    </div>
+    <div class="pitem rv" onclick="openCS(2)" style="transition-delay:.3s">
+      <div class="pn">06</div><div class="pname">QUILL</div>
+      <div class="pcat">Web App · EdTech</div><div class="pyr">2022</div>
+      <div class="parr"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M7 17L17 7M7 7h10v10"/></svg></div>
+    </div>
+  </div>
+  <div class="fgrid rv">
+    <div class="fcard" onclick="openCS(0)">
+      <div class="fbg g2"></div>
+      <div class="falways">VAULT</div>
+      <div class="fover"><div class="fcat">Mobile · FinTech</div><div class="fname">VAULT<br>SAVINGS DASHBOARD</div></div>
+    </div>
+    <div class="fcard" onclick="openCS(1)">
+      <div class="fbg g1"></div>
+      <div class="falways">GROUNDING</div>
+      <div class="fover"><div class="fcat">Web · Wellness</div><div class="fname">GROUNDING<br>MENTAL HEALTH</div></div>
+    </div>
+    <div class="fcard" onclick="openCS(2)">
+      <div class="fbg g3"></div>
+      <div class="falways">PRISM</div>
+      <div class="fover"><div class="fcat">Design System</div><div class="fname">PRISM<br>COMPONENT LIBRARY</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="abl rv">
+    <div class="ablbl">About</div>
+    <div class="abbig">THE<br>CRAFT<br>OF<br><em>CLARITY</em></div>
+    <div class="abp">
+      <p>I'm a UI designer with 8 years shaping digital products across fintech, healthcare, and creative industries. I believe the best interfaces disappear — leaving only the experience.</p>
+      <p>Currently open to select freelance work and full-time roles where design shapes strategy.</p>
+    </div>
+    <div class="skillgrid rv" style="transition-delay:.1s">
+      <div class="sk">UI Design</div><div class="sk">Design Systems</div>
+      <div class="sk">Interaction</div><div class="sk">Prototyping</div>
+      <div class="sk">Figma</div><div class="sk">User Research</div>
+      <div class="sk">Motion Design</div><div class="sk">Visual Identity</div>
+    </div>
+  </div>
+  <div class="abr rv" style="transition-delay:.12s">
+    <div class="abport"><div class="abinit">MS</div></div>
+    <div class="awawards">
+      <div class="aw"><div class="awn">Webby Award — Nomination</div><div class="awy">2024</div></div>
+      <div class="aw"><div class="awn">Awwwards Site of the Day</div><div class="awy">2023</div></div>
+      <div class="aw"><div class="awn">Dribbble Top Designer</div><div class="awy">2023</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="chtop rv">
+    <div class="chbig">LET'S<br>MAKE<br><span>SOMETHING.</span></div>
+  </div>
+  <div class="chgrid">
+    <div class="chl rv">
+      <a href="mailto:hello@Adibaskoro.com" class="chlink">
+        <div><div class="chll">Email</div><div class="chlv">hello@Adibaskoro.com</div></div>
+        <div class="chlarr"><svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M7 17L17 7M7 7h10v10"/></svg></div>
+      </a>
+      <a href="#" class="chlink">
+        <div><div class="chll">LinkedIn</div><div class="chlv">/in/Adibassolene</div></div>
+        <div class="chlarr"><svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M7 17L17 7M7 7h10v10"/></svg></div>
+      </a>
+      <a href="#" class="chlink">
+        <div><div class="chll">Dribbble</div><div class="chlv">/Adibassolene</div></div>
+        <div class="chlarr"><svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M7 17L17 7M7 7h10v10"/></svg></div>
+      </a>
+      <a href="#" class="chlink">
+        <div><div class="chll">Read.cv</div><div class="chlv">Adibaskoro.com</div></div>
+        <div class="chlarr"><svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M7 17L17 7M7 7h10v10"/></svg></div>
+      </a>
+    </div>
+    <div class="chr rv" style="transition-delay:.1s">
+      <form class="form" onsubmit="doSub(event)">
+        <div class="ff"><label>Your Name</label><input type="text" placeholder="Full name"></div>
+        <div class="ff"><label>Email Address</label><input type="email" placeholder="your@email.com"></div>
+        <div class="ff"><label>Subject</label><input type="text" placeholder="What's this about?"></div>
+        <div class="ff"><label>Message</label><textarea placeholder="Tell me about your project..."></textarea></div>
+        <button type="submit" class="fsub" id="fsub">
+          Send Message
+          <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>© 2025 Adibas Solène</span>
+  <span>UI Designer — Available for Work</span>
+  <span>Paris, France</span>
+</footer>
+</div>
+
+<div id="csc"></div>
+
+<script>
+// Cursor
+const C=document.getElementById('cur'),T=document.getElementById('curt');
+let mx=0,my=0,tx=0,ty=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;C.style.left=mx+'px';C.style.top=my+'px';});
+(function loop(){tx+=(mx-tx)*.12;ty+=(my-ty)*.12;T.style.left=tx+'px';T.style.top=ty+'px';requestAnimationFrame(loop);})();
+function hov(el){el.addEventListener('mouseenter',()=>C.classList.add('h'));el.addEventListener('mouseleave',()=>C.classList.remove('h'));}
+document.querySelectorAll('a,button,.pitem,.fcard,.chlink').forEach(hov);
+
+// Scroll reveal
+const ob=new IntersectionObserver(en=>{en.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');ob.unobserve(e.target);}});},{threshold:.08});
+document.querySelectorAll('.rv').forEach(el=>ob.observe(el));
+
+function scrollTo(id){setTimeout(()=>document.getElementById(id).scrollIntoView({behavior:'smooth'}),50);}
+
+// Projects data
+const P=[
+  {id:0,cat:'Mobile App · FinTech',title:'VAULT',sub:'Savings Dashboard',bg:'gh1',nid:1,nname:'GROUNDING',nsub:'Mental Health Companion',
+   meta:[{l:'Role',v:'Lead UI Designer'},{l:'Duration',v:'14 Weeks'},{l:'Year',v:'2024'},{l:'Platform',v:'iOS & Android'}],
+   ovh:'Designing trust into every pixel',
+   ovb:['Vault came to me as a savings app with a data problem: users had powerful tools but couldn\'t understand their own financial health at a glance. Chart-heavy, jargon-dense, built for power users who didn\'t exist.','Over 14 weeks I led the complete redesign — from information architecture through high-fidelity prototypes to final developer handoff. The single guiding question: what does financial confidence actually feel like?'],
+   steps:[{n:'01',t:'Discovery & Mapping',d:'Three weeks of user interviews distilled into one insight: users wanted to feel in control, not just informed. That distinction rewired the entire hierarchy — from data-forward to emotion-forward.',g:'g2'},{n:'02',t:'Structure & Flow',d:'The existing app had 11 navigation items. We reduced to 3. Full IA workshop with stakeholders, card sorting to validate. Result: a bottom nav anchored by three emotional states — Today, Goals, Move.',g:'g1'},{n:'03',t:'Visual Language',d:'A warm visual system moving away from typical fintech cold-blue toward deep amber and near-black. Typography set in a geometric display paired with mono for numbers — reinforcing hand-crafted precision.',g:'g3'}],
+   metrics:[{v:'62%',l:'Daily Active User Increase'},{v:'4.8★',l:'App Store Rating (from 3.1)'},{v:'41%',l:'Support Ticket Reduction'}],
+   res:['The redesign launched in Q2 2024 and exceeded every metric within 30 days. Simplified onboarding reduced drop-off by 38%.','The project received a Webby Award nomination and was featured in Mobbin\'s curated collection.']},
+  {id:1,cat:'Web Platform · Wellness',title:'GROUNDING',sub:'Mental Health Companion',bg:'gh2',nid:2,nname:'PRISM',nsub:'Component Library',
+   meta:[{l:'Role',v:'UI/UX Designer'},{l:'Duration',v:'20 Weeks'},{l:'Year',v:'2023'},{l:'Platform',v:'Web PWA'}],
+   ovh:'Where safety and simplicity converge',
+   ovb:['Grounding is a web-based mental health companion for people experiencing anxiety. The brief: create an interface that feels calm to use even when the person using it isn\'t calm.','I worked with clinical psychologists to develop a design system built on evidence-based principles. Every color, every animation, every interaction validated against clinical standards.'],
+   steps:[{n:'01',t:'Research with Clinicians',d:'Three practicing therapists helped translate clinical protocols — box breathing, body scanning — into interaction patterns. Core finding: visual complexity itself triggers anxiety.',g:'g1'},{n:'02',t:'Calm by Design',d:'Every element designed to reduce cognitive load. Strict rules: no more than two interactive elements per view, animation durations tuned to breathing cycles (4-7s), color palette from environmental psychology research.',g:'g3'},{n:'03',t:'Accessibility First',d:'Exceeded WCAG 2.1 AA across all flows. Tested with users with anxiety disorders. Built reduced-motion variants as the default, not an afterthought.',g:'g5'}],
+   metrics:[{v:'89%',l:'Users Reported Feeling Calmer'},{v:'12min',l:'Avg Session Duration'},{v:'AAA',l:'WCAG Accessibility Rating'}],
+   res:['Grounding launched to 50,000 beta users with 91% retention at 30 days — exceptional in a category where average sits at 18%.','The project informed a published research paper on digital therapeutic design, co-authored with the clinical psychology team.']},
+  {id:2,cat:'Design System · SaaS',title:'PRISM',sub:'Component Library',bg:'gh3',nid:0,nname:'VAULT',nsub:'Savings Dashboard',
+   meta:[{l:'Role',v:'Design Systems Lead'},{l:'Duration',v:'6 Months'},{l:'Year',v:'2023'},{l:'Platform',v:'Cross-Platform SaaS'}],
+   ovh:'One language for a whole company',
+   ovb:['Prism was born from a painful truth: a 60-person org with 4 designers, 3 teams, and zero shared components. Features looked different depending on which team built them. Trust was eroding.','I led the design side of a 6-month initiative — from design principles through Figma libraries to React components — creating the foundation that tripled design capacity.'],
+   steps:[{n:'01',t:'Audit & Foundation',d:'A full visual audit of 140 screens revealed 23 variants of the primary button and 11 modal patterns. I catalogued every component and built a decision framework for when new patterns were justified.',g:'g3'},{n:'02',t:'Tokens & Architecture',d:'Three-tier token architecture — global, semantic, component-level — using Tokens Studio for Figma. Enabled multi-theme support including high-contrast accessibility from day one.',g:'g2'},{n:'03',t:'Adoption & Documentation',d:'A system no one uses is no system at all. Weekly office hours, component rationale docs, Figma playground file. Adoption reached 80% of product surfaces within 90 days.',g:'g5'}],
+   metrics:[{v:'80%',l:'Design Coverage in 90 Days'},{v:'3×',l:'Faster Feature Velocity'},{v:'140+',l:'Components Documented'}],
+   res:['Prism reduced feature design time by 60% in Q1 post-launch. Designers reported feeling unblocked for the first time.','The system became the foundation for a full product rebrand shipped in 6 weeks instead of the projected 6 months.']}
+];
+
+function openCS(id){
+  const p=P[id],n=P[p.nid];
+  const meta=p.meta.map(m=>`<div class="cshmeta-i"><div class="csml">${m.l}</div><div class="csmv">${m.v}</div></div>`).join('');
+  const body=p.ovb.map(t=>`<p>${t}</p>`).join('');
+  const steps=p.steps.map(s=>`<div class="csstep"><div class="csnum">${s.n}</div><div><div class="csstit">${s.t}</div><p class="csdesc">${s.d}</p></div><div class="csimg ${s.g}"></div></div>`).join('');
+  const metrics=p.metrics.map(m=>`<div class="csm"><div class="csmval">${m.v}</div><div class="csmlbl">${m.l}</div></div>`).join('');
+  const res=p.res.map(t=>`<p>${t}</p>`).join('');
+
+  document.getElementById('csc').innerHTML=`
+    <div class="csw on">
+      <div class="csbar">
+        <div class="csbread">Work <span class="s">→</span> ${p.title}</div>
+        <button class="csback" onclick="closeCS()"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Back to Work</button>
+      </div>
+      <div class="cshero"><div class="cshbg ${p.bg}"></div>
+        <div class="cshcont"><div><div class="cshcat">${p.cat}</div><div class="cshtitle">${p.title}<br><em>${p.sub}</em></div></div>
+        <div class="cshmeta" style="display:flex;flex-direction:column;gap:1.25rem;text-align:right">${meta}</div></div>
+      </div>
+      <div class="csec"><div class="csec-n">00 — Overview</div><h2>${p.ovh}</h2><div class="csovgrid"><div class="csovp">${body}</div><div></div></div></div>
+      <div class="csec"><div class="csec-n">01 — Process</div><h2>HOW THE WORK<br><em>CAME TOGETHER</em></h2><div class="cssteps">${steps}</div></div>
+      <div class="csec"><div class="csec-n">02 — Results</div><h2>WHAT WE<br><em>ACHIEVED</em></h2><div class="csmetrics">${metrics}</div><div class="csrb">${res}</div></div>
+      <button class="csnext" onclick="openCS(${p.nid})"><div><div class="csnl">Next Project</div><div class="csnn">${n.title} — ${n.sub}</div></div><div class="cna"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M7 17L17 7M7 7h10v10"/></svg></div></button>
+    </div>`;
+
+  document.getElementById('mp').style.display='none';
+  window.scrollTo({top:0,behavior:'instant'});
+  document.querySelectorAll('#csc a,#csc button').forEach(hov);
+  setTimeout(()=>{
+    const mg=document.querySelector('.csmetrics');
+    if(mg){new IntersectionObserver(en=>{en.forEach(e=>{if(e.isIntersecting)e.target.querySelectorAll('.csm').forEach((m,i)=>setTimeout(()=>m.classList.add('iv'),i*150));});},{threshold:.3}).observe(mg);}
+  },200);
+}
+
+function closeCS(){
+  document.getElementById('csc').innerHTML='';
+  document.getElementById('mp').style.display='block';
+  setTimeout(()=>document.getElementById('work').scrollIntoView({behavior:'smooth'}),50);
+}
+
+function goHome(){
+  if(document.getElementById('mp').style.display==='none'){
+    document.getElementById('csc').innerHTML='';
+    document.getElementById('mp').style.display='block';
+  }
+}
+
+function doSub(e){
+  e.preventDefault();
+  const b=document.getElementById('fsub');
+  b.textContent='Sent ✓';b.style.background='#1a4a2a';b.style.color='#e8ff47';
+  setTimeout(()=>{b.innerHTML='Send Message <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>';b.style.background='';b.style.color='';e.target.reset();},3000);
+}
+</script>
+</body>
+</html>
